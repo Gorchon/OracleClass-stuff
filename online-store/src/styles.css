@@ -59,6 +59,32 @@
     --z-index-medium: 100;
     --z-index-high: 1000;
     --z-index-highest: 1001;
+
+    /* Light mode colors (default) */
+    --bg-color: var(--white);
+    --text-color: var(--text-dark);
+    --card-bg: var(--white);
+    --form-bg: var(--white);
+    --border-color: var(--gray);
+    --header-bg: var(--primary);
+    --footer-bg: var(--secondary);
+    --input-bg: var(--white);
+    --button-bg: var(--primary-dark);
+    --count-bg: var(--danger);
+}
+
+/* Dark mode colors */
+[data-theme="dark"] {
+    --bg-color: #1a1a1a;
+    --text-color: #f5f5f5;
+    --card-bg: #2d2d2d;
+    --form-bg: #2d2d2d;
+    --border-color: #444;
+    --header-bg: #0d3c61;
+    --footer-bg: #1a2b3d;
+    --input-bg: #333;
+    --button-bg: #0d3c61;
+    --count-bg: #9a1919;
 }
 
 /* Base Styles */
@@ -68,6 +94,31 @@ body {
     padding: 0;
     min-width: 315px;
     line-height: var(--line-height);
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color var(--transition-normal), color var(--transition-normal);
+}
+
+/* Dark mode toggle button */
+.dark-mode-toggle {
+    background: transparent;
+    border: none;
+    color: var(--text-color);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--border-radius);
+    transition: var(--transition-fast);
+}
+
+.dark-mode-toggle:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .dark-mode-toggle {
+    color: var(--text-light);
 }
 
 /* Root Layout Structure */
@@ -181,7 +232,6 @@ body {
     }
 }
 
-/* Responsive Adjustments */
 @media (min-width: 641px) {
     .pagination-link {
         min-width: 2rem;
@@ -202,7 +252,7 @@ body {
 
 /* Filter Sidebar Container */
 .filter-sidebar {
-    background: var(--white);
+    background: var(--form-bg);
     border-radius: var(--border-radius);
     box-shadow: var(--shadow-sm);
     padding: var(--space-lg);
@@ -214,9 +264,9 @@ body {
     font-size: 1.25rem;
     font-weight: 600;
     margin-bottom: 1.25rem;
-    color: var(--text-dark);
+    color: var(--text-color);
     padding-bottom: 0.75rem;
-    border-bottom: 1px solid var(--gray);
+    border-bottom: 1px solid var(--border-color);
 }
 
 /* Category List */
@@ -233,24 +283,24 @@ body {
 .category-list li a {
     display: block;
     padding: 0.75rem var(--space-md);
-    color: var(--text-gray);
+    color: var(--text-color);
     text-decoration: none;
     border-radius: 6px;
     transition: var(--transition-fast);
     font-weight: 500;
 }
 
-/* Hover State */
-.category-list li a:not(.active):hover {
-    background-color: var(--light-gray);
-    color: var(--text-dark);
-}
-
 /* Active State */
 .category-list li a.active {
-    background-color: var(--primary);
+    background-color: var(--button-bg);
     color: var(--white);
     font-weight: 600;
+}
+
+/* Hover State */
+.category-list li a:not(.active):hover {
+    background: color-mix(in srgb, var(--header-bg), var(--white) 10%);
+    color: var(--text-color);
 }
 
 /* Mobile View */
@@ -269,6 +319,11 @@ body {
     .category-list li a {
         padding: var(--space-sm) 0.75rem;
         font-size: 0.9rem;
+    }
+
+    /* Mobile filter container background */
+    .filter-container {
+        background: var(--form-bg);
     }
 }
 
@@ -302,9 +357,9 @@ body {
     }
 }
 
-/* Navbar - Primary Color Theme */
+/* Navbar - use header-bg */
 .navbar {
-    background: var(--primary);
+    background: var(--header-bg);
     box-shadow: var(--shadow-md);
     position: sticky;
     top: 0;
@@ -328,7 +383,7 @@ body {
     display: none;
     flex-direction: column;
     gap: var(--space-xs);
-    background: color-mix(in srgb, var(--primary), var(--black) 10%);
+    background: color-mix(in srgb, var(--header-bg), var(--black) 10%);
     padding: var(--space-sm) 0;
 }
 
@@ -442,7 +497,7 @@ body {
 
 /* Cart Count */
 .cart-count {
-    background-color: var(--primary);
+    background-color: var(--count-bg);
     color: var(--white);
     border-radius: 50%;
     padding: 0.1rem 0.4rem;
@@ -497,11 +552,11 @@ body {
 
 /* Product Card */
 .product-card {
-    border: 1px solid var(--gray);
+    border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
     overflow: hidden;
     transition: transform var(--transition-fast);
-    background: var(--white);
+    background: var(--card-bg);
 }
 
 .product-image-link {
@@ -529,7 +584,7 @@ body {
 }
 
 .product-title a {
-    color: var(--text-dark);
+    color: var(--text-color);
     text-decoration: none;
     font-size: var(--font-size-base);
     display: -webkit-box;
@@ -556,8 +611,9 @@ body {
     font-size: var(--font-size-lg);
 }
 
+/* Changed to button-bg for dark mode support */
 .add-to-cart {
-    background: var(--primary-dark);
+    background: var(--button-bg);
     color: var(--white);
     border: none;
     width: 32px;
@@ -620,7 +676,7 @@ body {
     display: inline-block;
     margin-top: var(--space-md);
     padding: 0.75rem 1.5rem;
-    background: var(--primary);
+    background: var(--button-bg);
     color: var(--white);
     text-decoration: none;
     border-radius: var(--border-radius-sm);
@@ -682,9 +738,9 @@ body {
     }
 }
 
-/* Footer */
+/* Footer - use footer-bg */
 .footer {
-    background: var(--secondary);
+    background: var(--footer-bg);
     color: var(--white);
     padding: var(--space-xl) 0;
     margin-top: auto;
@@ -749,8 +805,9 @@ body {
     border-radius: var(--border-radius-sm);
 }
 
+/* Changed to button-bg */
 .newsletter-form button {
-    background: var(--primary);
+    background: var(--button-bg);
     color: var(--white);
     border: none;
     padding: var(--space-sm);
@@ -998,8 +1055,9 @@ body {
     white-space: nowrap;
 }
 
+/* Changed to button-bg for .active tabs */
 .order-tabs button.active {
-    background: var(--primary);
+    background: var(--button-bg);
     color: var(--white);
 }
 
@@ -1042,8 +1100,9 @@ body {
     gap: var(--space-xl);
 }
 
+/* Changed to form-bg */
 .admin-form {
-    background: var(--light-gray);
+    background: var(--form-bg);
     padding: var(--space-lg);
     border-radius: var(--border-radius);
 }
@@ -1075,10 +1134,11 @@ body {
     padding: var(--space-md) 0;
 }
 
+/* Changed to text-color */
 .page-title {
     font-size: var(--font-size-xxl);
     margin-bottom: var(--space-lg);
-    color: var(--secondary);
+    color: var(--text-color);
 }
 
 .products-header {
@@ -1088,10 +1148,11 @@ body {
     margin-bottom: var(--space-lg);
 }
 
+/* Changed to button-bg */
 .mobile-filter-button {
     display: block;
     padding: var(--space-sm) var(--space-md);
-    background: var(--primary);
+    background: var(--button-bg);
     color: var(--white);
     border: none;
     border-radius: var(--border-radius-sm);
@@ -1153,7 +1214,7 @@ body {
 .reset-filters {
     margin-top: var(--space-md);
     padding: var(--space-sm) var(--space-md);
-    background: var(--primary);
+    background: var(--button-bg);
     color: var(--white);
     border: none;
     border-radius: var(--border-radius-sm);
@@ -1168,7 +1229,7 @@ body {
         left: 0;
         width: 80%;
         height: 100vh;
-        background: var(--white);
+        background: var(--form-bg);
         z-index: var(--z-index-high);
         padding: var(--space-md);
         box-shadow: var(--shadow-md);
@@ -1194,7 +1255,7 @@ body {
 
 /* Order Card */
 .order-card {
-    border: 1px solid var(--gray);
+    border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
     padding: var(--space-md);
     margin-bottom: var(--space-md);
@@ -1294,9 +1355,11 @@ body {
 .form-group select,
 .form-group textarea {
     padding: var(--space-sm);
-    border: 1px solid var(--gray);
+    border: 1px solid var(--border-color);
     border-radius: var(--border-radius-sm);
     font-family: inherit;
+    background-color: var(--input-bg);
+    color: var(--text-color);
 }
 
 .form-group textarea {
@@ -1318,9 +1381,10 @@ body {
     cursor: pointer;
 }
 
+/* Changed to button-bg */
 .submit-button {
     padding: var(--space-sm) var(--space-md);
-    background: var(--primary);
+    background: var(--button-bg);
     color: var(--white);
     border: none;
     border-radius: var(--border-radius-sm);
