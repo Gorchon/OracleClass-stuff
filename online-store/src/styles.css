@@ -616,9 +616,9 @@ body {
     background: var(--button-bg);
     color: var(--white);
     border: none;
-    width: 32px;
+    width: 100px;
+    border-radius: 10%;
     height: 32px;
-    border-radius: 50%;
     font-size: var(--font-size-base);
     cursor: pointer;
     transition: background var(--transition-fast);

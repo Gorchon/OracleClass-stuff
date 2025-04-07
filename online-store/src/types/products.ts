@@ -1,7 +1,7 @@
 // src/types/products.ts
 
 export interface Product {
-  id: number; // numeric ID you’re embedding in Firestore
+  id: string; // numeric ID you’re embedding in Firestore
   title: string;
   price: number;
   description: string;

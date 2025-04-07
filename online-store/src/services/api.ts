@@ -1,7 +1,16 @@
 // src/services/api.ts
 
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, getDocs, addDoc } from "firebase/firestore";
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  doc,
+  getDoc,
+} from "firebase/firestore";
 import { Product, ProductsResponse } from "../types/products";
 
 // -------------------------------------------
@@ -220,13 +229,25 @@ export const fetchProducts = async (params: {
 };
 
 // -------------------------------------------
-// 7) fetchProductById()
+// 7) fetchProductById() - updated to read from Firestore directly
 // -------------------------------------------
 export const fetchProductById = async (
-  id: number
+  id: string
 ): Promise<Product | undefined> => {
-  if (!allProducts.length) {
-    allProducts = await getProducts();
+  try {
+    const productRef = doc(db, "products", id); // get reference to the product document
+    const productSnap = await getDoc(productRef); // fetch the document
+
+    if (productSnap.exists()) {
+      return {
+        id: productSnap.id,
+        ...productSnap.data(),
+      } as Product;
+    } else {
+      return undefined;
+    }
+  } catch (error) {
+    console.error("Error fetching product by ID:", error);
+    throw error;
   }
-  return allProducts.find((p) => p.id === id);
 };

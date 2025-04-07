@@ -1,22 +1,27 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from "react-router-dom";
+import { BreadcrumbsProps } from "../types/breadcrumbs";
 
-export const Breadcrumbs = () => {
-    const location = useLocation();
-    const pathNames = location.pathname.split('/').filter(x => x);
+export const Breadcrumbs = ({ entries }: BreadcrumbsProps) => {
+  const pathNames = entries?.map((entry) => ({
+    name: entry.name,
+    path: entry.path,
+  }));
 
-    return (
-        <div className="breadcrumbs">
-            <Link to="/">Home</Link>
-            {pathNames.map((name, index) => {
-                const routeTo = `/${pathNames.slice(0, index + 1).join('/')}`;
-                const isLast = index === pathNames.length - 1;
+  return (
+    <div className="breadcrumbs">
+      <Link to="/">Home</Link>
+      {pathNames?.map(({ name, path }, index) => {
+        const isLast = index === pathNames?.length - 1;
 
-                return isLast ? (
-                    <span key={name}> / {name.replace(/-/g, ' ')}</span>
-                ) : (
-                    <span key={name}> / <Link to={routeTo}>{name.replace(/-/g, ' ')}</Link></span>
-                );
-            })}
-        </div>
-    );
+        return isLast ? (
+          <span key={name}> / {name}</span>
+        ) : (
+          <span key={name}>
+            {" "}
+            / <Link to={path}>{name}</Link>
+          </span>
+        );
+      })}
+    </div>
+  );
 };
