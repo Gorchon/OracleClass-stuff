@@ -1,55 +1,72 @@
-import { Breadcrumbs } from '../components/Breadcrumbs';
-import { RatingStars } from '../components/RatingStars';
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { Breadcrumbs } from "../components/Breadcrumbs";
+import { RatingStars } from "../components/RatingStars";
+import { fetchProductById } from "../services/api";
+import { Product } from "../types/products";
 
 export const ProductDetails = () => {
-    // Hardcoded product data
-    const product = {
-        id: 1,
-        title: 'Premium Wireless Headphones',
-        price: 199.99,
-        rating: 4,
-        description: 'Experience crystal-clear sound with our premium noise-cancelling headphones. 40-hour battery life, comfortable over-ear design, and Bluetooth 5.0 connectivity.',
-        features: [
-            'Active Noise Cancellation',
-            '40-hour battery',
-            'Bluetooth 5.0',
-            'Built-in microphone'
-        ],
-        images: [
-            'https://picsum.photos/600/400?random=1',
-            'https://picsum.photos/600/400?random=2',
-            'https://picsum.photos/600/400?random=3'
-        ]
+  const { id } = useParams();
+  const [product, setProduct] = useState<Product | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const loadProduct = async () => {
+      try {
+        setLoading(true);
+        if (id) {
+          const fetchedProduct = await fetchProductById(id);
+          if (fetchedProduct) {
+            setProduct(fetchedProduct);
+          } else {
+            setError("Product not found");
+          }
+        }
+      } catch (error) {
+        setError("Failed to load product. " + error);
+      } finally {
+        setLoading(false);
+      }
     };
 
-    return (
-        <div className="product-details">
-            <Breadcrumbs />
+    loadProduct().then();
+  }, [id]);
 
-            <div className="product-container">
-                <div className="product-gallery">
-                    {product.images.map((img, index) => (
-                        <img key={index} src={img} alt={`Product view ${index + 1}`} />
-                    ))}
-                </div>
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
+  if (!product) return <div>Product not found</div>;
 
-                <div className="product-info">
-                    <h1>{product.title}</h1>
-                    <RatingStars rating={product.rating} />
-                    <p className="price">${product.price.toFixed(2)}</p>
+  return (
+    <div className="product-details">
+      <Breadcrumbs
+        entries={[
+          { name: "Products", path: "/products" },
+          { name: product.title, path: "" },
+        ]}
+      />
 
-                    <div className="product-description">
-                        <p>{product.description}</p>
-                        <ul>
-                            {product.features.map((feature, index) => (
-                                <li key={index}>{feature}</li>
-                            ))}
-                        </ul>
-                    </div>
-
-                    <button className="add-to-cart">Add to Cart</button>
-                </div>
-            </div>
+      <div className="product-container">
+        <div className="product-gallery">
+          <img
+            key={product.id}
+            src={product.image}
+            alt={`Product view ${product.title}`}
+          />
         </div>
-    );
+
+        <div className="product-info">
+          <h1>{product.title}</h1>
+          <RatingStars rating={product.rating as number} />
+          <p className="price">${product.price.toFixed(2)}</p>
+
+          <div className="product-description">
+            <p>{product.description}</p>
+          </div>
+
+          <button className="add-to-cart">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+  );
 };
