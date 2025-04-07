@@ -20,8 +20,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 // -------------------------------------------
-// 2) Product Seeding Array (10 items)
-//    (Uses 'rating' & 'createdAt', even though your interface lacks them.)
+// 2) Product Seeding Array
 // -------------------------------------------
 const products = [
   {
@@ -135,68 +134,64 @@ const products = [
   },
 ];
 
-/**
- * 3) We'll store a cached array from Firestore, to avoid re-fetching every time.
- */
+// -------------------------------------------
+// 3) Cached Array
+// -------------------------------------------
 let allProducts: Product[] = [];
 
-/**
- * 4) getProducts():
- *    - Loads from Firestore "products" collection.
- *    - If empty & source === "home", seeds with the 10 items above.
- *    - Returns the final array of products (with numeric IDs).
- */
-export const getProducts = async (source: string): Promise<Product[]> => {
+// -------------------------------------------
+// 4) initializeProducts()
+// -------------------------------------------
+export const initializeProducts = async () => {
   try {
-    const productsCol = collection(db, "products");
-    const snapshot = await getDocs(productsCol);
+    const productsCollection = collection(db, "products");
+    const snapshot = await getDocs(productsCollection);
 
-    // If Firestore is empty and we're on home, seed it.
-    if (snapshot.size === 0 && source === "home") {
-      // Insert each product with a numeric `id` (1..10)
-      for (let i = 0; i < products.length; i++) {
-        await addDoc(productsCol, { id: i + 1, ...products[i] });
+    if (snapshot.size === 0) {
+      for (const product of products) {
+        await addDoc(productsCollection, product);
+        console.log(`Added: ${product.title}`);
       }
-      console.log("Seeded Firestore with 10 products.");
-
-      // Return them with numeric IDs
-      return products.map((p, i) => ({ id: i + 1, ...p })) as Product[];
+      console.log("All products added successfully.");
     }
-
-    // If not empty, read them all from Firestore
-    const loadedProducts: Product[] = snapshot.docs.map((doc) => {
-      // doc.data() has { id, title, ...plus rating, createdAt, etc. }
-      return doc.data() as Product;
-    });
-
-    return loadedProducts;
   } catch (error) {
-    console.error("Error in getProducts:", error);
+    console.error("Error initializing products: ", error);
+  }
+};
+
+// -------------------------------------------
+// 5) getProducts()
+// -------------------------------------------
+export const getProducts = async (): Promise<Product[]> => {
+  try {
+    const productsCollection = collection(db, "products");
+    const snapshot = await getDocs(productsCollection);
+
+    return snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    })) as Product[];
+  } catch (error) {
+    console.error("Error fetching products:", error);
     throw error;
   }
 };
 
-/**
- * 5) fetchProducts():
- *    - Calls getProducts() to ensure we have the latest data from Firestore.
- *    - Applies optional category/search filters.
- *    - Paginates the result set.
- */
+// -------------------------------------------
+// 6) fetchProducts()
+// -------------------------------------------
 export const fetchProducts = async (params: {
   page: number;
   perPage?: number;
   category?: string;
   query?: string;
-  source: string; // e.g. "home"
 }): Promise<ProductsResponse> => {
-  const { page, category, query, source } = params;
+  const { page, category, query } = params;
   const perPage = params.perPage ?? 20;
   const startIndex = (page - 1) * perPage;
 
-  // Load from Firestore if we haven't yet, or re-load each time
-  allProducts = await getProducts(source);
+  allProducts = await getProducts();
 
-  // Filter by category
   let filtered = [...allProducts];
   if (category) {
     filtered = filtered.filter(
@@ -204,7 +199,6 @@ export const fetchProducts = async (params: {
     );
   }
 
-  // Filter by query
   if (query) {
     const q = query.toLowerCase();
     filtered = filtered.filter(
@@ -214,7 +208,6 @@ export const fetchProducts = async (params: {
     );
   }
 
-  // Pagination
   const totalItems = filtered.length;
   const totalPages = Math.ceil(totalItems / perPage);
   const data = filtered.slice(startIndex, startIndex + perPage);
@@ -226,17 +219,14 @@ export const fetchProducts = async (params: {
   };
 };
 
-/**
- * 6) fetchProductById():
- *    - If our cached `allProducts` is empty, reload from Firestore.
- *    - Find by numeric "id" property.
- */
+// -------------------------------------------
+// 7) fetchProductById()
+// -------------------------------------------
 export const fetchProductById = async (
   id: number
 ): Promise<Product | undefined> => {
   if (!allProducts.length) {
-    // Just load them all with a generic "source"
-    allProducts = await getProducts("any");
+    allProducts = await getProducts();
   }
   return allProducts.find((p) => p.id === id);
 };
