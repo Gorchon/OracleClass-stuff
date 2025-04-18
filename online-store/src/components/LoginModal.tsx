@@ -6,7 +6,6 @@ import {
   signInWithEmail,
   registerWithEmail,
 } from "../services/api";
-import "./LoginModal.css";
 
 interface LoginModalProps {
   onClose: () => void;

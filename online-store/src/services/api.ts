@@ -1,5 +1,3 @@
-// src/services/api.ts
-
 import { initializeApp } from "firebase/app";
 
 // Firestore imports (now including setDoc)

@@ -1,7 +1,6 @@
 // src/components/LoginButton.tsx
 import React, { useState } from "react";
 import LoginModal from "./LoginModal";
-import "./LoginModal.css";
 
 /**
  * Simple button that opens the LoginModal.

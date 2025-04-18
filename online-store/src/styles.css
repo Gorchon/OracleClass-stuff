@@ -1477,3 +1477,396 @@ body {
         justify-content: center;
     }
 }
+
+
+
+
+/* LoginModal & ConfirmationDialog styles */
+
+.login-modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .login-modal-container,
+  .confirmation-dialog-container {
+    background-color: var(--form-bg);
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    padding: 24px;
+  }
+  
+  .login-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .login-modal-header h2,
+  .confirmation-dialog-title {
+    margin: 0;
+    font-size: 1.5rem;
+    color: var(--text-color);
+  }
+  
+  .login-modal-close-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-color);
+  }
+  
+  .login-modal-close-btn:hover {
+    color: color-mix(in srgb, var(--text-color), var(--danger));
+  }
+  
+  .login-modal-error {
+    background-color: var(--form-bg);
+    border: 1px solid var(--danger);
+    color: var(--danger);
+    padding: 12px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+  }
+  
+  .confirmation-dialog-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .confirmation-dialog-content {
+    margin-bottom: 24px;
+  }
+  
+  .confirmation-dialog-message {
+    margin-top: 12px;
+    color: var(--text-color);
+  }
+  
+  .confirmation-dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+  }
+  
+  .confirmation-dialog-button {
+    padding: 8px 16px;
+    font-size: 1rem;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  /* Variants for confirm button */
+  .confirm-button.neutral {
+    background-color: var(--primary);
+    color: #fff;
+  }
+  
+  .confirm-button.warning {
+    background-color: var(--warning);
+    color: #fff;
+  }
+  
+  .confirm-button.danger {
+    background-color: var(--danger);
+    color: #fff;
+  }
+  
+  .cancel-button {
+    background-color: transparent;
+    color: var(--text-color);
+    border: 1px solid var(--text-color);
+  }
+  
+  /* ===== LoginModal & ConfirmationDialog Styles ===== */
+
+/* Backdrop */
+.login-modal-backdrop,
+.confirmation-dialog-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Containers */
+.login-modal-container,
+.confirmation-dialog-container {
+  background-color: var(--form-bg);
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  padding: 24px;
+}
+
+/* Modal Header */
+.login-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.login-modal-header h2,
+.confirmation-dialog-title {
+  margin: 0;
+  font-size: 1.5rem;
+  color: var(--text-color);
+}
+
+/* Close Button */
+.login-modal-close-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--text-color);
+}
+.login-modal-close-btn:hover {
+  color: color-mix(in srgb, var(--text-color), var(--danger));
+}
+
+/* Error Message */
+.login-modal-error {
+  background-color: var(--form-bg);
+  border: 1px solid var(--danger);
+  color: var(--danger);
+  padding: 12px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+}
+
+/* Form */
+.login-modal-form {
+  margin-bottom: 20px;
+}
+.login-modal-form-group {
+  margin-bottom: 16px;
+}
+.login-modal-form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: var(--text-color);
+}
+.login-modal-form-group input {
+  min-width: 95%;
+  width: auto;
+  padding: 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 1rem;
+}
+.login-modal-form-group input:focus {
+  outline: none;
+  border-color: var(--button-bg) !important;
+  box-shadow: 0 0 2px var(--button-bg);
+}
+
+/* Submit Button */
+.login-modal-submit-btn {
+  width: 100%;
+  padding: 12px;
+  background: var(--button-bg) !important;
+  color: var(--white) !important;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: 8px;
+}
+.login-modal-submit-btn:hover {
+  background: color-mix(in srgb, var(--button-bg), var(--text-color)) !important;
+}
+
+/* Divider */
+.login-modal-divider {
+  position: relative;
+  margin: 20px 0;
+  text-align: center;
+}
+.login-modal-divider::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background-color: var(--form-bg);
+  z-index: 1;
+}
+.login-modal-divider span {
+  position: relative;
+  background-color: var(--form-bg);
+  padding: 0 12px;
+  z-index: 2;
+  color: var(--border-color);
+  font-size: 0.875rem;
+}
+
+/* Google Button */
+.login-modal-google-btn {
+  width: 100%;
+  padding: 12px;
+  background-color: var(--gray-dark) !important;
+  color: var(--black);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.login-modal-google-btn:hover {
+  background-color: color-mix(in srgb, var(--gray-dark), var(--text-color)) !important;
+}
+.login-modal-google-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 12px;
+}
+
+/* Footer & Toggle */
+.login-modal-footer {
+  margin-top: 20px;
+  text-align: center;
+}
+.login-modal-toggle-btn {
+  background: none;
+  border: none;
+  color: var(--primary-dark) !important;
+  font-size: 0.875rem;
+  cursor: pointer;
+  padding: 4px;
+}
+.login-modal-toggle-btn:hover {
+  text-decoration: underline;
+}
+
+/* ===== LogoutButton Styles ===== */
+.logout-button {
+  padding: 8px 16px;
+  background-color: var(--button-bg);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.logout-button:hover {
+  background-color: color-mix(in srgb, var(--button-bg), var(--text-color) 50%);
+}
+.logout-button:disabled {
+  background-color: color-mix(in srgb, var(--button-bg), var(--text-color) 50%);
+  cursor: not-allowed;
+}
+/* Loading Spinner */
+.logout-button::after {
+  content: "";
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin-left: 8px;
+  border: 2px solid var(--border-color);
+  border-top-color: var(--border-color);
+  border-radius: 50%;
+  animation: spin 1s ease-in-out infinite;
+  opacity: 0;
+}
+.logout-button:disabled::after {
+  opacity: 1;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ===== ConfirmationDialog Styles ===== */
+.confirmation-dialog-content {
+  padding: 24px;
+}
+.confirmation-dialog-message {
+  margin-top: 12px;
+  color: var(--text-color);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+.confirmation-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 16px 24px;
+  background-color: var(--form-bg);
+  border-top: 1px solid var(--form-bg);
+}
+.confirmation-dialog-button {
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  border: none;
+}
+.confirm-button {
+  color: white;
+}
+.confirm-button.neutral {
+  background-color: var(--button-bg);
+}
+.confirm-button.neutral:hover {
+  background-color: color-mix(in srgb, var(--button-bg), var(--text-color) 50%);
+}
+.confirm-button.warning {
+  background-color: var(--warning);
+}
+.confirm-button.warning:hover {
+  background-color: color-mix(in srgb, var(--warning), var(--text-color) 50%);
+}
+.confirm-button.danger {
+  background-color: var(--danger);
+}
+.confirm-button.danger:hover {
+  background-color: color-mix(in srgb, var(--danger), var(--text-color) 50%);
+}
+.cancel-button {
+  background-color: var(--gray-dark) !important;
+  color: var(--white);
+  border: 1px solid #ddd;
+}
+.cancel-button:hover {
+  background-color: color-mix(in srgb, var(--gray-dark), var(--text-color) 50%);
+}
