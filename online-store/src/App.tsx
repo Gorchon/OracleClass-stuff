@@ -12,7 +12,7 @@ import { Orders } from "./pages/Orders";
 import { Admin } from "./pages/Admin";
 import { Products } from "./pages/Products";
 
-import AdminRoute from "./components/AdminRoute"; // ✅ secure admin route
+import AdminRoute from "./components/AdminRoute";
 
 import "./styles.css";
 

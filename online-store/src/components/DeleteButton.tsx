@@ -2,20 +2,24 @@
 import React, { useCallback } from "react";
 import { useConfirmation } from "../hooks/useConfirmation";
 
-interface DeleteButtonProps {
+export interface DeleteButtonProps {
   onDelete: () => Promise<void> | void;
+  className?: string;
 }
 
-export const DeleteButton: React.FC<DeleteButtonProps> = ({ onDelete }) => {
+export const DeleteButton: React.FC<DeleteButtonProps> = ({
+  onDelete,
+  className = "delete-button",
+}) => {
   const { confirm, Confirmation } = useConfirmation();
 
   const handleDelete = useCallback(async () => {
     try {
       await onDelete();
-      // Optional: you could show a toast or success message here
+      // Optional: toast success here
     } catch (error) {
       console.error("Delete failed:", error);
-      // Optional: you could set an error state or show an error message here
+      // Optional: show error UI
     }
   }, [onDelete]);
 
@@ -31,7 +35,7 @@ export const DeleteButton: React.FC<DeleteButtonProps> = ({ onDelete }) => {
 
   return (
     <>
-      <button className="delete-button" onClick={showConfirmation}>
+      <button className={className} onClick={showConfirmation}>
         Delete
       </button>
       <Confirmation />
