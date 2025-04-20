@@ -5,6 +5,8 @@ import { DarkModeToggle } from "./DarkModeToggle";
 import { useAuth } from "../context/AuthContext";
 import LoginButton from "./LoginButton";
 import LogoutButton from "./LogoutButton";
+// a) Importa el logo
+import logo from "../assets/e-shopp.png";
 
 const Navbar: React.FC = () => {
   const { user, role, displayName } = useAuth();
@@ -16,11 +18,17 @@ const Navbar: React.FC = () => {
     <nav className="navbar">
       <div className="container">
         <div className="navbar-brand">
-          <Link to="/" onClick={closeMenu}>
-            E‑Shop
+          {/* b) Logo + texto dentro de Link */}
+          <Link to="/" onClick={closeMenu} className="logo-link">
+            <img
+              src={logo as string}
+              alt="E‑Shop Logo"
+              className="navbar-logo"
+            />
+            <span>E‑Shop</span>
           </Link>
 
-          {/* Hamburger for mobile */}
+          {/* Hamburger para móvil */}
           <button
             className="hamburger"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -31,10 +39,16 @@ const Navbar: React.FC = () => {
           </button>
         </div>
 
-        {/* Links + actions */}
+        {/* Menú colapsable */}
         <div className={`nav-links ${isMenuOpen ? "open" : ""}`}>
-          <Link to="/" onClick={closeMenu}>
-            E‑Shop
+          {/* c) En mobile también mostramos logo en el menú */}
+          <Link to="/" onClick={closeMenu} className="navbar-home logo-link">
+            <img
+              src={logo as string}
+              alt="E‑Shop Logo"
+              className="navbar-logo"
+            />
+            <span>E‑Shop</span>
           </Link>
           <Link to="/products" onClick={closeMenu}>
             Products
@@ -46,7 +60,7 @@ const Navbar: React.FC = () => {
             Orders
           </Link>
 
-          {/* Only show Admin link to admins */}
+          {/* Solo admins */}
           {role === "admin" ? (
             <Link to="/admin" onClick={closeMenu}>
               Admin
@@ -55,12 +69,12 @@ const Navbar: React.FC = () => {
             <div />
           )}
 
-          {/* Dark mode toggle */}
+          {/* Dark mode */}
           <div className="navbar-actions">
             <DarkModeToggle />
           </div>
 
-          {/* Welcome message if logged in */}
+          {/* Bienvenida */}
           <div className="navbar-actions">
             {user ? (
               <Link to="/" onClick={closeMenu}>
@@ -71,7 +85,7 @@ const Navbar: React.FC = () => {
             )}
           </div>
 
-          {/* Login / Logout button */}
+          {/* Login / Logout */}
           <div className="navbar-actions">
             {user ? <LogoutButton /> : <LoginButton />}
           </div>
