@@ -5,7 +5,7 @@ import {
   signInWithGoogle,
   signInWithEmail,
   registerWithEmail,
-} from "../services/api";
+} from "../services/authenticationService";
 
 interface LoginModalProps {
   onClose: () => void;

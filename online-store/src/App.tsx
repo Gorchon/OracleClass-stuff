@@ -14,8 +14,6 @@ import { Products } from "./pages/Products";
 
 import AdminRoute from "./components/AdminRoute";
 
-import "./styles.css";
-
 export default function App() {
   return (
     <Router>

@@ -4,7 +4,7 @@ import { ProductCard } from "../components/ProductCard";
 import { SearchBar } from "../components/SearchBar";
 import { useEffect, useState } from "react";
 import { Product } from "../types/products.ts";
-import { fetchProducts } from "../services/api";
+import { fetchProducts } from "../services/productService.ts";
 import { useSearchParams } from "react-router-dom";
 import { Pagination } from "../components/Pagination.tsx";
 

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Breadcrumbs } from "../components/Breadcrumbs";
 import { RatingStars } from "../components/RatingStars";
-import { fetchProductById } from "../services/api";
+import { fetchProductById } from "../services/productService";
 import { Product } from "../types/products";
 
 export const ProductDetails = () => {

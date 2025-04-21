@@ -5,7 +5,7 @@ import { SearchBar } from "../components/SearchBar";
 import { FilterSidebar } from "../components/FilterSidebar";
 import { Pagination } from "../components/Pagination";
 import { Product } from "../types/products";
-import { fetchProducts } from "../services/api";
+import { fetchProducts } from "../services/productService";
 
 export const Products = () => {
   const [searchParams] = useSearchParams();

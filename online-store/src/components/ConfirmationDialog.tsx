@@ -1,6 +1,5 @@
 // src/components/ConfirmationDialog.tsx
 import React, { ReactNode } from "react";
-import "../styles.css";
 
 type ConfirmationDialogProps = {
   isOpen: boolean;

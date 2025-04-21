@@ -1,8 +1,7 @@
 // src/components/LogoutButton.tsx
 import React, { useState, useCallback } from "react";
 import { useConfirmation } from "../hooks/useConfirmation";
-import { logout } from "../services/api";
-import "../styles.css";
+import { logout } from "../services/authenticationService";
 
 /**
  * Button that shows a confirmation dialog before logging out.

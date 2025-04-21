@@ -7,7 +7,11 @@ import React, {
   ReactNode,
 } from "react";
 import { User, onAuthStateChanged } from "firebase/auth";
-import { auth, getUserDisplayName, getUserRole } from "../services/api";
+import {
+  getUserDisplayName,
+  getUserRole,
+} from "../services/authenticationService";
+import { auth } from "../services/firebaseConfig";
 
 interface AuthContextType {
   user: User | null;

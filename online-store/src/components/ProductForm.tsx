@@ -1,7 +1,7 @@
 // src/components/ProductForm.tsx
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
-import { db } from "../services/api";
+import { db } from "../services/firebaseConfig";
 import { useConfirmation } from "../hooks/useConfirmation";
 import { Product } from "../types/products";
 

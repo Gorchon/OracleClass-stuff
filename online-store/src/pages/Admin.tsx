@@ -1,7 +1,7 @@
 // src/pages/Admin.tsx
 import React, { useState, useEffect } from "react";
 import { Product } from "../types/products";
-import { db } from "../services/api";
+import { db } from "../services/firebaseConfig";
 import { collection, getDocs, doc, deleteDoc } from "firebase/firestore";
 import { ProductForm } from "../components/ProductForm";
 import { ProductTable } from "../components/ProductTable";
