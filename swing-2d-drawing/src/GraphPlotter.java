@@ -16,7 +16,7 @@ public class GraphPlotter extends JPanel {
 
         g2d.setColor(Color.BLACK);
         g2d.drawLine(margin, height / 2, width - margin, height / 2); // x
-        g2d.drawLine(width / 2, margin, width / 2, height - margin);  // y
+        g2d.drawLine(width / 2, margin, width / 2, height - margin); // y
 
         g2d.drawString("X", width - margin + 10, height / 2 - 5);
         g2d.drawString("Y", width / 2 + 5, margin - 10);

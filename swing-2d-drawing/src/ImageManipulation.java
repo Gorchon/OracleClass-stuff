@@ -11,7 +11,7 @@ public class ImageManipulation extends JPanel {
 
     public ImageManipulation() {
         try {
-            originalImage = ImageIO.read(new File("test.jpg")); 
+            originalImage = ImageIO.read(new File("test.jpg"));
             grayscaleImage = convertToGrayscale(originalImage);
         } catch (Exception e) {
             e.printStackTrace();
@@ -26,8 +26,8 @@ public class ImageManipulation extends JPanel {
             for (int x = 0; x < original.getWidth(); x++) {
                 Color color = new Color(original.getRGB(x, y));
                 int gray = (int) (color.getRed() * 0.299 +
-                                  color.getGreen() * 0.587 +
-                                  color.getBlue() * 0.114);
+                        color.getGreen() * 0.587 +
+                        color.getBlue() * 0.114);
                 Color grayColor = new Color(gray, gray, gray);
                 grayscale.setRGB(x, y, grayColor.getRGB());
             }
