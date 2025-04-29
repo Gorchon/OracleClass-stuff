@@ -459,7 +459,7 @@ body {
 }
 
 .navbar-logo {
-  height: 20px;    
+  height: 20px; /* Adjust as needed */
   margin-right: 7px;
   vertical-align: middle;
 }
@@ -470,6 +470,8 @@ body {
   text-decoration: none;
   color: inherit;
 }
+
+
 
 /* Tablet+ */
 @media (min-width: 769px) {
@@ -856,7 +858,10 @@ body {
 .social-icons a:hover {
   background: rgba(255, 255, 255, 0.2);
 }
-
+.social-icons a img {
+  width: 32px;
+  height: 32px;
+}
 /* Tablet */
 @media (min-width: 768px) {
   .footer-grid {
@@ -1404,16 +1409,6 @@ body {
   cursor: pointer;
 }
 
-.clear-image-button {
-  padding: var(--space-sm) var(--space-md);
-  background: var(--danger);
-  color: var(--white);
-  border: none;
-  border-radius: var(--border-radius-sm);
-  cursor: pointer;
-}
-
-
 /* Product Table */
 .table-container {
   overflow-x: auto;
@@ -1432,7 +1427,7 @@ body {
 }
 
 .product-table th {
-  background: var(--form-bg);
+  background: var(--light-gray);
   font-weight: 500;
 }
 
@@ -1501,11 +1496,7 @@ body {
   }
 }
 
-
-
-
-/* LoginModal & ConfirmationDialog styles */
-
+/* src/components/LoginModal.css */
 .login-modal-backdrop {
   position: fixed;
   top: 0;
@@ -1519,8 +1510,7 @@ body {
   z-index: 1000;
 }
 
-.login-modal-container,
-.confirmation-dialog-container {
+.login-modal-container {
   background-color: var(--form-bg);
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -1536,8 +1526,7 @@ body {
   margin-bottom: 20px;
 }
 
-.login-modal-header h2,
-.confirmation-dialog-title {
+.login-modal-header h2 {
   margin: 0;
   font-size: 1.5rem;
   color: var(--text-color);
@@ -1565,7 +1554,147 @@ body {
   font-size: 0.9rem;
 }
 
-.confirmation-dialog-backdrop {
+.login-modal-form {
+  margin-bottom: 20px;
+ }
+ .login-modal-form-group {
+  margin-bottom: 16px;
+ }
+ .login-modal-form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: var(--text-color);
+ }
+ .login-modal-form-group input {
+  min-width: 95%;
+  width: auto;
+  padding: 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 1rem;
+ }
+ .login-modal-form-group input:focus {
+  outline: none;
+  border-color: var(--button-bg) !important;
+  box-shadow: 0 0 0 2px var(--button-bg);
+ }
+ .login-modal-submit-btn {
+  width: 100%;
+  padding: 12px;
+  background: var(--button-bg) !important;
+  color: var(--white) !important;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: 8px;
+ }
+ .login-modal-submit-btn:hover {
+  background: color-mix(in srgb, var(--button-bg),var(--text-color)) !important;
+ }
+ .login-modal-divider {
+  position: relative;
+  margin: 20px 0;
+  text-align: center;
+ }
+ .login-modal-divider::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background-color: var(--form-bg);
+  z-index: 1;
+ }
+ .login-modal-divider span {
+  position: relative;
+  background-color: var(--form-bg);
+  padding: 0 12px;
+  z-index: 2;
+  color: var(--border-color);
+  font-size: 0.875rem;
+ }
+
+
+ login-modal-google-btn {
+  width: 100%;
+  padding: 12px;
+  background-color: var(--gray-dark) !important;
+  color: var(--black);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+ }
+ .login-modal-google-btn:hover {
+  background-color: color-mix(in srgb, var(--gray-dark),var(--text-color))!important;
+ }
+ .login-modal-google-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 12px;
+ }
+ .login-modal-footer {
+  margin-top: 20px;
+  text-align: center;
+ }
+ .login-modal-toggle-btn {
+  background: none;
+  border: none;
+  color: var(--primary-dark) !important;
+  font-size: 0.875rem;
+  cursor: pointer;
+  padding: 4px;
+ }
+ .login-modal-toggle-btn:hover {
+  text-decoration: underline;
+ }
+ /* src/components/LogoutButton.css */
+ .logout-button {
+  padding: 8px 16px;
+  background-color: var(--button-bg);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+ }
+ .logout-button:hover {
+  background-color: color-mix(in srgb, var(--button-bg),var(--text-color) 50%);
+ }
+ .logout-button:disabled {
+  background-color: color-mix(in srgb, var(--button-bg),var(--text-color) 50%);
+  cursor: not-allowed;
+ }
+
+ /* Loading spinner */
+.logout-button::after {
+  content: "";
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin-left: 8px;
+  border: 2px solid var(--border-color);
+  border-radius: 50%;
+  border-top-color: var(--border-color);
+  animation: spin 1s ease-in-out infinite;
+  opacity: 0;
+ }
+ .logout-button:disabled::after {
+  opacity: 1;
+ }
+ @keyframes spin {
+  to { transform: rotate(360deg); }
+ }
+ /* src/components/ConfirmationDialog.css */
+ .confirmation-dialog-backdrop {
   position: fixed;
   top: 0;
   left: 0;
@@ -1573,327 +1702,367 @@ body {
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   z-index: 1000;
-}
-
-.confirmation-dialog-content {
-  margin-bottom: 24px;
-}
-
-.confirmation-dialog-message {
-  margin-top: 12px;
+ }
+ .confirmation-dialog-container {
+  background-color: var(--form-bg);
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 90%;
+  max-width: 500px;
+  overflow: hidden;
+ }
+ .confirmation-dialog-content {
+  padding: 24px;
+ }
+ .confirmation-dialog-title {
+  font-size: 1.25rem;
+  font-weight: 500;
   color: var(--text-color);
-}
-
-.confirmation-dialog-actions {
+  margin: 0 0 8px 0;
+ }
+ .confirmation-dialog-message {
+  font-size: 0.875rem;
+  color: var(--text-color);
+  line-height: 1.5;
+ }
+ .confirmation-dialog-actions {
   display: flex;
   justify-content: flex-end;
   gap: 12px;
-}
-
-.confirmation-dialog-button {
+  padding: 16px 24px;
+  background-color: var(--form-bg);
+  border-top: 1px solid var(--form-bg);
+ }
+ confirmation-dialog-button {
   padding: 8px 16px;
-  font-size: 1rem;
   border-radius: 4px;
-  border: none;
+  font-size: 0.875rem;
+  font-weight: 500;
   cursor: pointer;
-}
-
-/* Variants for confirm button */
-.confirm-button.neutral {
-  background-color: var(--primary);
-  color: #fff;
-}
-
-.confirm-button.warning {
+  transition: background-color 0.2s ease;
+  border: none;
+ }
+ .confirm-button {
+  color: white;
+ }
+ .confirm-button.neutral {
+  background-color: var(--button-bg);
+ }
+ .confirm-button.neutral:hover {
+  background-color: color-mix(in srgb,var(--button-bg),var(--text-color)50%);
+ }
+ .confirm-button.warning {
   background-color: var(--warning);
-  color: #fff;
-}
-
-.confirm-button.danger {
+ }
+ .confirm-button.warning:hover {
+  background-color: color-mix(in srgb, var(--warning), var(--text-color) 50%);
+ }
+ .confirm-button.danger {
   background-color: var(--danger);
-  color: #fff;
-}
+ }
+ .confirm-button.danger:hover {
+  background-color: color-mix(in srgb, var(--danger), var(--text-color) 50%);
+ }
+ .cancel-button {
+  background-color: var(--gray-dark) !important;
+  color: var(--white);
+  border: 1px solid #ddd;
+ }
+ .cancel-button:hover {
+  background-color: color-mix(in srgb, var(--gray-dark),var(--text-color)50%);
+ }
 
-.cancel-button {
-  background-color: transparent;
-  color: var(--text-color);
-  border: 1px solid var(--text-color);
-}
 
-/* ===== LoginModal & ConfirmationDialog Styles ===== */
+ /* Add to cart button styles */
+.add-to-cart-button {
+  background-color: var(--button-bg);
+  color: white;
+  border: none;
+  border-radius: 0.375rem;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+ }
+ .add-to-cart-button:hover {
+  background-color: color-mix(in srgb,var(--button-bg), var(--text-color) 30%);;
+ }
+ .add-to-cart-button:disabled {
+  background-color: color-mix(in srgb,var(--button-bg), var(--text-color) 70%);
+  cursor: not-allowed;
+ }
+ /* Loading animation */
+ .add-to-cart-button.loading::after {
+  content: "";
+  position: absolute;
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s linear infinite;
+  margin-left: 0.5rem;
+ }
+ /* Success state */
+ .add-to-cart-button.success {
+  background-color: var(--success);
+ }
+ .add-to-cart-button.success::after {
+  content: "✓";
+  margin-left: 0.5rem;
+ }
+ /* Error state */
+ .add-to-cart-button.error {
+  background-color: var(--danger);
+ }
+ .add-to-cart-button.error::after {
+  content: "!";
+  margin-left: 0.5rem;
 
-/* Backdrop */
-.login-modal-backdrop,
-.confirmation-dialog-backdrop {
-position: fixed;
-top: 0;
-left: 0;
-right: 0;
-bottom: 0;
-background-color: rgba(0, 0, 0, 0.5);
-display: flex;
-justify-content: center;
-align-items: center;
-z-index: 1000;
 }
-
-/* Containers */
-.login-modal-container,
-.confirmation-dialog-container {
-background-color: var(--form-bg);
-border-radius: 8px;
-box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-width: 100%;
-max-width: 400px;
-padding: 24px;
-}
-
-/* Modal Header */
-.login-modal-header {
-display: flex;
-justify-content: space-between;
-align-items: center;
-margin-bottom: 20px;
-}
-.login-modal-header h2,
-.confirmation-dialog-title {
-margin: 0;
-font-size: 1.5rem;
-color: var(--text-color);
-}
-
-/* Close Button */
-.login-modal-close-btn {
-background: none;
-border: none;
-font-size: 1.5rem;
-cursor: pointer;
-color: var(--text-color);
-}
-.login-modal-close-btn:hover {
-color: color-mix(in srgb, var(--text-color), var(--danger));
-}
-
-/* Error Message */
-.login-modal-error {
-background-color: var(--form-bg);
-border: 1px solid var(--danger);
-color: var(--danger);
-padding: 12px;
-border-radius: 4px;
-margin-bottom: 20px;
-font-size: 0.9rem;
-}
-
-/* Form */
-.login-modal-form {
-margin-bottom: 20px;
-}
-.login-modal-form-group {
-margin-bottom: 16px;
-}
-.login-modal-form-group label {
-display: block;
-margin-bottom: 8px;
-font-weight: 500;
-color: var(--text-color);
-}
-.login-modal-form-group input {
-min-width: 95%;
-width: auto;
-padding: 10px;
-border: 1px solid var(--border-color);
-border-radius: 4px;
-font-size: 1rem;
-}
-.login-modal-form-group input:focus {
-outline: none;
-border-color: var(--button-bg) !important;
-box-shadow: 0 0 2px var(--button-bg);
-}
-
-/* Submit Button */
-.login-modal-submit-btn {
-width: 100%;
-padding: 12px;
-background: var(--button-bg) !important;
-color: var(--white) !important;
-border: none;
-border-radius: 4px;
-font-size: 1rem;
-font-weight: 500;
-cursor: pointer;
-margin-top: 8px;
-}
-.login-modal-submit-btn:hover {
-background: color-mix(in srgb, var(--button-bg), var(--text-color)) !important;
-}
-
-/* Divider */
-.login-modal-divider {
-position: relative;
-margin: 20px 0;
-text-align: center;
-}
-.login-modal-divider::before {
-content: "";
-position: absolute;
-top: 50%;
-left: 0;
-right: 0;
-height: 1px;
-background-color: var(--form-bg);
-z-index: 1;
-}
-.login-modal-divider span {
-position: relative;
-background-color: var(--form-bg);
-padding: 0 12px;
-z-index: 2;
-color: var(--border-color);
-font-size: 0.875rem;
-}
-
-/* Google Button */
-.login-modal-google-btn {
-width: 100%;
-padding: 12px;
-background-color: var(--gray-dark) !important;
-color: var(--black);
-border: 1px solid var(--border-color);
-border-radius: 4px;
-font-size: 1rem;
-font-weight: 500;
-cursor: pointer;
-display: flex;
-align-items: center;
-justify-content: center;
-}
-.login-modal-google-btn:hover {
-background-color: color-mix(in srgb, var(--gray-dark), var(--text-color)) !important;
-}
-.login-modal-google-icon {
-width: 20px;
-height: 20px;
-margin-right: 12px;
-}
-
-/* Footer & Toggle */
-.login-modal-footer {
-margin-top: 20px;
-text-align: center;
-}
-.login-modal-toggle-btn {
-background: none;
-border: none;
-color: var(--primary-dark) !important;
-font-size: 0.875rem;
-cursor: pointer;
-padding: 4px;
-}
-.login-modal-toggle-btn:hover {
-text-decoration: underline;
-}
-
-/* ===== LogoutButton Styles ===== */
-.logout-button {
-padding: 8px 16px;
-background-color: var(--button-bg);
-color: white;
-border: none;
-border-radius: 4px;
-cursor: pointer;
-transition: background-color 0.2s ease;
-}
-.logout-button:hover {
-background-color: color-mix(in srgb, var(--button-bg), var(--text-color) 50%);
-}
-.logout-button:disabled {
-background-color: color-mix(in srgb, var(--button-bg), var(--text-color) 50%);
-cursor: not-allowed;
-}
-/* Loading Spinner */
-.logout-button::after {
-content: "";
-display: inline-block;
-width: 12px;
-height: 12px;
-margin-left: 8px;
-border: 2px solid var(--border-color);
-border-top-color: var(--border-color);
-border-radius: 50%;
-animation: spin 1s ease-in-out infinite;
-opacity: 0;
-}
-.logout-button:disabled::after {
-opacity: 1;
-}
+/* Keyframe animation */
 @keyframes spin {
-to {
-  transform: rotate(360deg);
+ to {
+ transform: rotate(360deg);
+ }
 }
+/* Responsive adjustments */
+@media (min-width: 640px) {
+ .add-to-cart-container {
+ flex-direction: row;
+ align-items: center;
+ }
+ .add-to-cart-button {
+ width: auto;
+ }
+}
+/* Micro-interaction for click */
+.add-to-cart-button:active {
+ transform: scale(0.98);
+}
+/* Cart Page Specific Styles */
+.cart-page-container {
+ padding: var(--space-xl) 0;
+ max-width: var(--max-width);
+ margin: 0 auto;
+}
+.cart-page-container h1 {
+ font-size: var(--font-size-xxl);
+ margin-bottom: var(--space-xl);
+ color: var(--text-color);
+ padding: 0 var(--padding);
+}
+.cart-empty-state {
+ text-align: center;
+ padding: var(--space-xl) 0;
+}
+.cart-empty-state h2 {
+ font-size: var(--font-size-xl);
+ margin-bottom: var(--space-md);
+ color: var(--text-color);
+}
+.cart-continue-shopping {
+ display: inline-block;
+ padding: var(--space-md) var(--space-lg);
+ background: var(--button-bg);
+ color: var(--white);
+ text-decoration: none;
+ border-radius: var(--border-radius);
+ transition: background var(--transition-fast);
+}
+.cart-continue-shopping:hover {
+ background: var(--primary);
+}
+.cart-content-wrapper {
+ display: flex;
+ flex-direction: column;
+ gap: var(--space-xl);
+ padding: 0 var(--padding);
+}
+.cart-items-list {
+ flex: 1;
+}
+.cart-item-card {
+ display: flex;
+ align-items: center;
+ justify-content: space-between;
+ padding: var(--space-md) 0;
+ border-bottom: 1px solid var(--border-color);
+ gap: var(--space-md);
 }
 
-/* ===== ConfirmationDialog Styles ===== */
-.confirmation-dialog-content {
-padding: 24px;
-}
-.confirmation-dialog-message {
-margin-top: 12px;
-color: var(--text-color);
-font-size: 0.875rem;
-line-height: 1.5;
-}
-.confirmation-dialog-actions {
-display: flex;
-justify-content: flex-end;
-gap: 12px;
-padding: 16px 24px;
-background-color: var(--form-bg);
-border-top: 1px solid var(--form-bg);
-} 
-.confirmation-dialog-button {
-padding: 8px 16px;
-border-radius: 4px;
-font-size: 0.875rem;
-font-weight: 500;
-cursor: pointer;
-transition: background-color 0.2s ease;
-border: none;
-}
-.confirm-button {
-color: white;
-}
-.confirm-button.neutral {
-background-color: var(--button-bg);
-}
-.confirm-button.neutral:hover {
-background-color: color-mix(in srgb, var(--button-bg), var(--text-color) 50%);
-}
-.confirm-button.warning {
-background-color: var(--warning);
-}
-.confirm-button.warning:hover {
-background-color: color-mix(in srgb, var(--warning), var(--text-color) 50%);
-}
-.confirm-button.danger {
-background-color: var(--danger);
-}
-.confirm-button.danger:hover {
-background-color: color-mix(in srgb, var(--danger), var(--text-color) 50%);
-}
-.cancel-button {
-background-color: var(--gray-dark) !important;
-color: var(--white);
-border: 1px solid #ddd;
-}
-.cancel-button:hover {
-background-color: color-mix(in srgb, var(--gray-dark), var(--text-color) 50%);
-}
-.social-icons a img {
+
+.cart-item-card:last-child {
+  border-bottom: none;
+ }
+ .cart-item-info {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  flex: 1;
+  min-width: 0; /* Prevents flex overflow */
+ }
+ .cart-item-image {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: var(--border-radius-sm);
+  flex-shrink: 0;
+ }
+ .cart-item-details {
+  min-width: 0; /* Allows text truncation */
+ }
+ .cart-item-details h3 {
+  font-size: var(--font-size-base);
+  margin: 0;
+  color: var(--text-color);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+ }
+ .cart-item-details p {
+  margin: var(--space-xs) 0 0;
+  color: var(--text-gray);
+  font-size: var(--font-size-sm);
+ }
+ .cart-quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+ }
+ .cart-quantity-btn {
   width: 32px;
   height: 32px;
+  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  color: var(--text-color);
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+ }
+ .cart-quantity-btn:hover:not(:disabled) {
+  background: var(--gray);
+ }
+ .cart-quantity-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+ }
+ .cart-quantity-value {
+  min-width: 30px;
+  text-align: center;
+ }
+ .cart-item-total {
+  font-weight: bold;
+  min-width: 80px;
+  text-align: right;
+ }
+ .cart-remove-item {
+  background: none;
+  border: none;
+  color: var(--danger);
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  transition: color var(--transition-fast);
+  padding: var(--space-xs);
+  margin-left: var(--space-sm);
+ }
+
+ .cart-remove-item:hover {
+  color: var(--danger);
+  text-decoration: underline;
+ }
+ .cart-summary-section {
+  background: var(--form-bg);
+  padding: var(--space-lg);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-sm);
+ }
+ .cart-summary-section h2 {
+  font-size: var(--font-size-xl);
+  margin-bottom: var(--space-lg);
+  color: var(--text-color);
+ }
+ .cart-summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: var(--space-md);
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid var(--border-color);
+ }
+ .cart-summary-row-total {
+  font-weight: bold;
+  font-size: var(--font-size-lg);
+  border-bottom: none;
+  margin-top: var(--space-md);
+ }
+ .cart-checkout-btn {
+  display: block;
+  width: 100%;
+  padding: var(--space-md);
+  background: var(--success);
+  color: var(--white);
+  border: none;
+  border-radius: var(--border-radius);
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: var(--space-lg);
+  transition: background var(--transition-fast);
+ }
+ .cart-checkout-btn:hover {
+  background: color-mix(in srgb, var(--success), var(--black) 10%);
+ }
+ .cart-clear-btn {
+  display: block;
+  width: 100%;
+  padding: var(--space-md);
+  background: var(--danger);
+  color: var(--white);
+  border: none;
+  border-radius: var(--border-radius);
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: var(--space-md);
+  transition: background var(--transition-fast);
+ }
+ .cart-clear-btn:hover {
+  background: color-mix(in srgb, var(--danger), var(--black) 10%);
+ }
+ /* Responsive Layout */
+ @media (min-width: 768px) {
+  .cart-content-wrapper {
+  flex-direction: row;
   }
+  .cart-summary-section {
+  width: 350px;
+  position: sticky;
+  top: calc(var(--space-xl) + var(--space-md)); /* Account for header */
+  align-self: flex-start;
+  }
+  .cart-item-card {
+
+    padding: var(--space-lg) 0;
+  }
+  .cart-item-image {
+  width: 100px;
+  height: 100px;
+  }
+ }
+ @media (min-width: 1024px) {
+  .cart-item-details h3 {
+  font-size: var(--font-size-lg);
+  }
+ }
+

@@ -1,82 +1,178 @@
-import { createContext, useContext, useState } from 'react';
+import {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  useEffect,
+} from "react";
+import { Cart, CartItem, createNewCart } from "../types/ cart";
+import {
+  getCart,
+  addItemToCart,
+  updateCartItemQuantity,
+  removeItemFromCart,
+  clearCart,
+} from "../services/cartService";
+import { useAuth } from "./AuthContext";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "../services/firebaseConfig";
 
-type CartItem = {
-    id: number;
-    title: string;
-    price: number;
-    quantity: number;
-    image: string;
-    size?: string;
-};
-
-type CartContextType = {
-    cartItems: CartItem[];
-    addToCart: (item: Omit<CartItem, 'quantity'>) => void;
-    removeFromCart: (id: number, size?: string) => void;
-    updateQuantity: (id: number, quantity: number, size?: string) => void;
-    clearCart: () => void;
-};
+interface CartContextType {
+  cart: Cart | null;
+  loading: boolean;
+  addToCart: (productId: string, quantity?: number) => Promise<void>;
+  updateItemQuantity: (productId: string, quantity: number) => Promise<void>;
+  removeFromCart: (productId: string) => Promise<void>;
+  clearUserCart: () => Promise<void>;
+  cartItemCount: number;
+}
 
 const CartContext = createContext<CartContextType>({
-    cartItems: [],
-    addToCart: () => {},
-    removeFromCart: () => {},
-    updateQuantity: () => {},
-    clearCart: () => {},
+  cart: null,
+  loading: true,
+  addToCart: async () => {},
+  updateItemQuantity: async () => {},
+  removeFromCart: async () => {},
+  clearUserCart: async () => {},
+  cartItemCount: 0,
 });
 
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
-    const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const { user } = useAuth();
+  const [cart, setCart] = useState<Cart | null>(null);
+  const [loading, setLoading] = useState(true);
 
-    const addToCart = (item: Omit<CartItem, 'quantity'>) => {
-        setCartItems(prev => {
-            const existingItem = prev.find(i =>
-                i.id === item.id && i.size === item.size
-            );
-            if (existingItem) {
-                return prev.map(i =>
-                    i.id === item.id && i.size === item.size
-                        ? { ...i, quantity: i.quantity + 1 }
-                        : i
-                );
-            }
-            return [...prev, { ...item, quantity: 1 }];
-        });
-    };
+  const ensureCartExists = useCallback(
+    async (userId: string): Promise<Cart> => {
+      const existingCart = await getCart(userId);
+      if (!existingCart) {
+        const newCart = createNewCart(userId);
+        await setDoc(doc(db, "carts", userId), newCart);
+        return newCart;
+      }
+      return existingCart;
+    },
+    []
+  );
 
-    const removeFromCart = (id: number, size?: string) => {
-        setCartItems(prev =>
-            prev.filter(i => !(i.id === id && i.size === size))
-        );
-    };
+  const fetchCart = useCallback(async () => {
+    if (!user) {
+      setCart(null);
+      setLoading(false);
+      return;
+    }
+    setLoading(true);
+    try {
+      const userCart = await ensureCartExists(user.uid);
+      setCart(userCart);
+    } catch (error) {
+      console.error("Error fetching cart:", error);
+      setCart(user ? createNewCart(user.uid) : null);
+    } finally {
+      setLoading(false);
+    }
+  }, [user, ensureCartExists]);
 
-    const updateQuantity = (id: number, quantity: number, size?: string) => {
-        if (quantity <= 0) {
-            removeFromCart(id, size);
-            return;
-        }
-        setCartItems(prev =>
-            prev.map(i =>
-                i.id === id && i.size === size ? { ...i, quantity } : i
-            )
-        );
-    };
+  useEffect(() => {
+    fetchCart();
+  }, [fetchCart]);
 
-    const clearCart = () => setCartItems([]);
+  const removeFromCart = useCallback(
+    async (productId: string) => {
+      if (!user) throw new Error("User must be logged in to remove from cart");
+      try {
+        setLoading(true);
+        await ensureCartExists(user.uid);
+        await removeItemFromCart(user.uid, productId);
+        await fetchCart();
+      } catch (error) {
+        console.error("Error removing from cart:", error);
+        throw error;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [user, fetchCart, ensureCartExists]
+  );
 
-    return (
-        <CartContext.Provider
-            value={{
-                cartItems,
-                addToCart,
-                removeFromCart,
-                updateQuantity,
-                clearCart,
-            }}
-        >
-            {children}
-        </CartContext.Provider>
-    );
+  const addToCart = useCallback(
+    async (productId: string, quantity: number = 1) => {
+      if (!user) throw new Error("User must be logged in to add to cart");
+      try {
+        setLoading(true);
+        await ensureCartExists(user.uid);
+        const newItem: CartItem = {
+          productId,
+          quantity,
+          addedAt: new Date(),
+        };
+        await addItemToCart(user.uid, newItem);
+        await fetchCart();
+      } catch (error) {
+        console.error("Error adding to cart:", error);
+        throw error;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [user, fetchCart, ensureCartExists]
+  );
+
+  const updateItemQuantity = useCallback(
+    async (productId: string, quantity: number) => {
+      if (!user) throw new Error("User must be logged in to update cart");
+      if (quantity <= 0) {
+        await removeFromCart(productId);
+        return;
+      }
+      try {
+        setLoading(true);
+        await ensureCartExists(user.uid);
+        await updateCartItemQuantity(user.uid, productId, quantity);
+        await fetchCart();
+      } catch (error) {
+        console.error("Error updating cart item:", error);
+        throw error;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [user, fetchCart, ensureCartExists, removeFromCart]
+  );
+
+  const clearUserCart = useCallback(async () => {
+    if (!user) throw new Error("User must be logged in to clear cart");
+    try {
+      setLoading(true);
+      await ensureCartExists(user.uid);
+      await clearCart(user.uid);
+      await fetchCart();
+    } catch (error) {
+      console.error("Error clearing cart:", error);
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  }, [user, fetchCart, ensureCartExists]);
+
+  const cartItemCount =
+    cart?.items.reduce((total, item) => total + item.quantity, 0) || 0;
+
+  return (
+    <CartContext.Provider
+      value={{
+        cart,
+        loading,
+        addToCart,
+        updateItemQuantity,
+        removeFromCart,
+        clearUserCart,
+        cartItemCount,
+      }}
+    >
+      {children}
+    </CartContext.Provider>
+  );
 };
 
 export const useCart = () => useContext(CartContext);

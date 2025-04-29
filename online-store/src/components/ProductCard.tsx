@@ -2,13 +2,17 @@
 
 import { Link } from "react-router-dom";
 import { RatingStars } from "./RatingStars";
-import { Product } from "../types/products.ts";
+import { Product } from "../types/products";
+import { AddToCartButton } from "./AddToCartButton"; // 1️⃣
+import { useAuth } from "../context/AuthContext"; // 1️⃣
 
 type ProductCardProps = {
   product: Product;
 };
 
 export const ProductCard = ({ product }: ProductCardProps) => {
+  const { user } = useAuth(); // 2️⃣
+
   return (
     <div className="product-card">
       <Link to={`/product/${product.id}`} className="product-image-link">
@@ -39,14 +43,14 @@ export const ProductCard = ({ product }: ProductCardProps) => {
           <RatingStars rating={product.rating as number} />
         </div>
 
-        <div className="product-footer">
-          <button
-            className="add-to-cart"
-            aria-label={`Add ${product.title} to cart`}
-          >
-            Add to Cart
-          </button>
-        </div>
+        {/* 3️⃣ only show add-to-cart when logged in */}
+        {user ? (
+          <div className="product-footer">
+            <AddToCartButton productId={product.id} />
+          </div>
+        ) : (
+          <div className="product-footer" />
+        )}
       </div>
     </div>
   );

@@ -3,13 +3,14 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { DarkModeToggle } from "./DarkModeToggle";
 import { useAuth } from "../context/AuthContext";
+import { useCart } from "../context/CartContext"; // 1️⃣ import useCart
 import LoginButton from "./LoginButton";
 import LogoutButton from "./LogoutButton";
-// a) Importa el logo
 import logo from "../assets/e-shopp.png";
 
 const Navbar: React.FC = () => {
   const { user, role, displayName } = useAuth();
+  const { cartItemCount } = useCart(); // 2️⃣ grab cartItemCount
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const closeMenu = () => setIsMenuOpen(false);
@@ -18,17 +19,17 @@ const Navbar: React.FC = () => {
     <nav className="navbar">
       <div className="container">
         <div className="navbar-brand">
-          {/* b) Logo + texto dentro de Link */}
+          {/* logo + home link */}
           <Link to="/" onClick={closeMenu} className="logo-link">
             <img
               src={logo as string}
-              alt="E‑Shop Logo"
+              alt="E-Shop Logo"
               className="navbar-logo"
             />
-            <span>E‑Shop</span>
+            <span>E-Shop</span>
           </Link>
 
-          {/* Hamburger para móvil */}
+          {/* mobile hamburger */}
           <button
             className="hamburger"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -39,53 +40,51 @@ const Navbar: React.FC = () => {
           </button>
         </div>
 
-        {/* Menú colapsable */}
         <div className={`nav-links ${isMenuOpen ? "open" : ""}`}>
-          {/* c) En mobile también mostramos logo en el menú */}
+          {/* mobile logo in menu */}
           <Link to="/" onClick={closeMenu} className="navbar-home logo-link">
             <img
               src={logo as string}
-              alt="E‑Shop Logo"
+              alt="E-Shop Logo"
               className="navbar-logo"
             />
-            <span>E‑Shop</span>
+            <span>E-Shop</span>
           </Link>
+
           <Link to="/products" onClick={closeMenu}>
             Products
           </Link>
+
+          {/* updated Cart link */}
           <Link to="/cart" onClick={closeMenu}>
-            Cart <span className="cart-count">(0)</span>
+            🛒 Cart{" "}
+            {cartItemCount > 0 ? (
+              <span className="cart-count">{cartItemCount}</span>
+            ) : null}
           </Link>
+
           <Link to="/orders" onClick={closeMenu}>
             Orders
           </Link>
 
-          {/* Solo admins */}
-          {role === "admin" ? (
+          {role === "admin" && (
             <Link to="/admin" onClick={closeMenu}>
               Admin
             </Link>
-          ) : (
-            <div />
           )}
 
-          {/* Dark mode */}
           <div className="navbar-actions">
             <DarkModeToggle />
           </div>
 
-          {/* Bienvenida */}
-          <div className="navbar-actions">
-            {user ? (
+          {user && (
+            <div className="navbar-actions">
               <Link to="/" onClick={closeMenu}>
                 Welcome {displayName}
               </Link>
-            ) : (
-              <div />
-            )}
-          </div>
+            </div>
+          )}
 
-          {/* Login / Logout */}
           <div className="navbar-actions">
             {user ? <LogoutButton /> : <LoginButton />}
           </div>
