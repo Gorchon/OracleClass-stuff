@@ -1,0 +1,9 @@
+background_music.ogg
+game_start.ogg
+libgdx.png
+paddle_hit.ogg
+pause.ogg
+resume.ogg
+round_end.ogg
+score.ogg
+wall_bounce.ogg
