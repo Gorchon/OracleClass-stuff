@@ -11,6 +11,7 @@ import { Checkout } from "./pages/Checkout";
 import { Orders } from "./pages/Orders";
 import { Admin } from "./pages/Admin";
 import { Products } from "./pages/Products";
+import { OrderDetails } from "./pages/OrderDetails.tsx";
 
 import AdminRoute from "./components/AdminRoute";
 
@@ -25,6 +26,10 @@ export default function App() {
         <Route path="/cart" element={<Cart />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/orders" element={<Orders />} />
+        <Route
+          path="/orders/:orderId"
+          element={(<OrderDetails />) as ReactNode}
+        />
 
         {/* Protected admin route */}
         <Route

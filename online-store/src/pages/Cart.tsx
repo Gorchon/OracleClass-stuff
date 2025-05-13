@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
 import { useCart } from "../context/CartContext";
 import { useProducts } from "../context/ProductContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"; // ⬅️ added useNavigate
 import { CartItem } from "../types/ cart";
 import { Product } from "../types/products";
 
 export const Cart = () => {
-  // 2. Constants for cart, products, and cartItems
+  // 1️⃣  Hook to programmatically change route
+  const navigate = useNavigate(); // ⬅️ added
+
+  // 2️⃣  Context state and helpers
   const { cart, loading, updateItemQuantity, removeFromCart, clearUserCart } =
     useCart();
   const { products, loading: productsLoading } = useProducts();
@@ -15,7 +18,7 @@ export const Cart = () => {
     cartItem: CartItem;
   }> | null>(null);
 
-  // 3. useEffect to set cartItems
+  // 3️⃣  Build the combined list whenever cart or products change
   useEffect(() => {
     if (cart && products) {
       const items = cart.items
@@ -33,7 +36,7 @@ export const Cart = () => {
     }
   }, [cart, products]);
 
-  // 4. Functions
+  // 4️⃣  Handlers
   const handleQuantityChange = async (
     productId: string,
     newQuantity: number
@@ -56,7 +59,7 @@ export const Cart = () => {
     }, 0);
   };
 
-  // 5. Loading and empty cart
+  // 5️⃣  Loading / empty states
   if (loading || productsLoading) {
     return <div>Loading cart...</div>;
   }
@@ -72,7 +75,7 @@ export const Cart = () => {
     );
   }
 
-  // 6. Final return
+  // 6️⃣  Main render
   return (
     <div className="cart-page">
       <div className="cart-page-container">
@@ -141,7 +144,13 @@ export const Cart = () => {
               <span>${calculateTotal().toFixed(2)}</span>
             </div>
 
-            <button className="cart-checkout-btn">Proceed to Checkout</button>
+            {/* 7️⃣  Checkout button wired to navigate to /checkout */}
+            <button
+              className="cart-checkout-btn"
+              onClick={() => navigate("/checkout")}
+            >
+              Proceed to Checkout
+            </button>
 
             <button onClick={handleClearCart} className="cart-clear-btn">
               Clear Cart
