@@ -10,12 +10,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 
 /**
- * M11 – Java Paint App | Session 3 complete
- * -------------------------------------------------------------
- * • Left-click colour swatch → stroke colour
- * • Right-click colour swatch → fill colour (panel shows choice)
- * • Draw / erase only with LEFT mouse button
- * • Eraser size adjustable with slider
+ * M11 – Java Paint App | Session 3 complete (con iconos escalados)
  */
 public class PaintApp {
 
@@ -35,11 +30,10 @@ public class PaintApp {
             Color.CYAN, Color.MAGENTA
     };
 
-    /** Simple POJO that also stores fill colour */
+    /** POJO que también guarda color de relleno */
     class ColoredShape {
         Shape shape;
-        Color stroke;
-        Color fill; // null → no fill
+        Color stroke, fill; // fill==null → sin relleno
 
         ColoredShape(Shape s, Color stroke, Color fill) {
             this.shape = s;
@@ -48,18 +42,16 @@ public class PaintApp {
         }
     }
 
-    /** Main canvas */
+    /** Lienzo principal */
     class DrawingPanel extends JPanel {
-
         private final List<ColoredShape> shapes = new ArrayList<>();
-        private ColoredShape previewShape; // shape under construction
-        private Point startPt; // drag origin
+        private ColoredShape previewShape;
+        private Point startPt;
         private Tool tool = Tool.PENCIL;
         private Color strokeColour = Color.BLACK;
-        private Color fillColour = null; // ← default: no fill
-        private int eraserSizePX = 12; // default eraser diameter
+        private Color fillColour = null;
+        private int eraserSizePX = 12;
 
-        /* API called by the UI */
         void setTool(Tool t) {
             tool = t;
         }
@@ -76,17 +68,16 @@ public class PaintApp {
             eraserSizePX = px;
         }
 
-        /* Constructor – register mouse handlers */
         DrawingPanel() {
             setBackground(Color.WHITE);
 
             addMouseListener(new MouseAdapter() {
                 @Override
                 public void mousePressed(MouseEvent e) {
-                    if (SwingUtilities.isLeftMouseButton(e)) {
-                        startPt = e.getPoint();
-                        previewShape = null;
-                    }
+                    if (!SwingUtilities.isLeftMouseButton(e))
+                        return;
+                    startPt = e.getPoint();
+                    previewShape = null;
                 }
 
                 @Override
@@ -104,76 +95,70 @@ public class PaintApp {
                 public void mouseDragged(MouseEvent e) {
                     if (!SwingUtilities.isLeftMouseButton(e))
                         return;
-
                     Shape s = null;
                     switch (tool) {
-
                         case PENCIL -> {
                             shapes.add(new ColoredShape(
                                     new Line2D.Double(startPt, e.getPoint()),
                                     strokeColour, null));
-                            startPt = e.getPoint(); // continue free-hand
+                            startPt = e.getPoint();
                         }
-
                         case RECTANGLE -> s = new Rectangle2D.Double(
                                 Math.min(startPt.x, e.getX()),
                                 Math.min(startPt.y, e.getY()),
                                 Math.abs(startPt.x - e.getX()),
                                 Math.abs(startPt.y - e.getY()));
-
                         case OVAL -> s = new Ellipse2D.Double(
                                 Math.min(startPt.x, e.getX()),
                                 Math.min(startPt.y, e.getY()),
                                 Math.abs(startPt.x - e.getX()),
                                 Math.abs(startPt.y - e.getY()));
-
                         case ARC -> s = new Arc2D.Double(
                                 Math.min(startPt.x, e.getX()),
                                 Math.min(startPt.y, e.getY()),
                                 Math.abs(startPt.x - e.getX()),
                                 Math.abs(startPt.y - e.getY()),
                                 0, 180, Arc2D.OPEN);
-
                         case ERASER -> {
                             int r = eraserSizePX;
                             shapes.add(new ColoredShape(
-                                    new Ellipse2D.Double(e.getX() - r / 2.0, e.getY() - r / 2.0, r, r),
+                                    new Ellipse2D.Double(
+                                            e.getX() - r / 2.0, e.getY() - r / 2.0, r, r),
                                     getBackground(), getBackground()));
                         }
                     }
-
-                    if (s != null)
+                    if (s != null) {
                         previewShape = new ColoredShape(s, strokeColour, fillColour);
-
+                    }
                     repaint();
                 }
             });
-        } // end-constructor
+        }
 
-        /* Painting routine */
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
             Graphics2D g2 = (Graphics2D) g;
-
-            // already finished shapes
-            for (ColoredShape cs : shapes)
-                drawShape(g2, cs);
-            // live preview
-            if (previewShape != null)
-                drawShape(g2, previewShape);
-        }
-
-        private void drawShape(Graphics2D g2, ColoredShape cs) {
-            if (cs.fill != null) {
-                g2.setColor(cs.fill);
-                g2.fill(cs.shape);
+            // dibuja formas ya finalizadas
+            for (ColoredShape cs : shapes) {
+                if (cs.fill != null) {
+                    g2.setColor(cs.fill);
+                    g2.fill(cs.shape);
+                }
+                g2.setColor(cs.stroke);
+                g2.draw(cs.shape);
             }
-            g2.setColor(cs.stroke);
-            g2.draw(cs.shape);
+            // dibujo en vivo
+            if (previewShape != null) {
+                if (previewShape.fill != null) {
+                    g2.setColor(previewShape.fill);
+                    g2.fill(previewShape.shape);
+                }
+                g2.setColor(previewShape.stroke);
+                g2.draw(previewShape.shape);
+            }
         }
 
-        /* Small helpers used by the buttons */
         void clearAll() {
             shapes.clear();
             previewShape = null;
@@ -182,64 +167,84 @@ public class PaintApp {
 
         void undo() {
             if (!shapes.isEmpty()) {
-                shapes.removeLast();
+                shapes.remove(shapes.size() - 1);
                 repaint();
             }
         }
 
         void savePNG() {
-            BufferedImage img = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_RGB);
+            BufferedImage img = new BufferedImage(
+                    getWidth(), getHeight(),
+                    BufferedImage.TYPE_INT_RGB);
             Graphics2D g2 = img.createGraphics();
             paint(g2);
             g2.dispose();
             try {
                 File out = new File("drawing.png");
                 ImageIO.write(img, "png", out);
-                JOptionPane.showMessageDialog(this, "Saved to:\n" + out.getAbsolutePath());
+                JOptionPane.showMessageDialog(this,
+                        "Guardado en:\n" + out.getAbsolutePath());
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Save error: " + ex.getMessage());
+                JOptionPane.showMessageDialog(this,
+                        "Error al guardar: " + ex.getMessage());
             }
         }
-    } // DrawingPanel ─────────────────────────────────────────────
+    }
 
-    /* ========== UI constructor ========== */
+    private final int ICON_SIZE = 24;
+
+    /** Carga y escala una imagen desde la carpeta icons */
+    private ImageIcon loadIcon(String filename) {
+        String path = "icons/" + filename;
+        File f = new File(path);
+        if (!f.exists())
+            return null;
+        ImageIcon raw = new ImageIcon(path);
+        Image img = raw.getImage()
+                .getScaledInstance(ICON_SIZE, ICON_SIZE, Image.SCALE_SMOOTH);
+        return new ImageIcon(img);
+    }
+
     public PaintApp() {
-
-        JFrame frame = new JFrame("M11 Java Paint App");
+        JFrame frame = new JFrame("M11 Java Paint App (iconos 24×24)");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
 
-        /* Canvas */
         DrawingPanel canvas = new DrawingPanel();
         frame.add(canvas, BorderLayout.CENTER);
 
-        /* Top toolbar */
-        JPanel bar = new JPanel(new FlowLayout(FlowLayout.LEFT, 12, 6));
+        JPanel bar = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 6));
 
-        // ► stroke / fill preview squares
+        // indicadores de color
         JPanel strokeBox = colourBox(Color.BLACK, 25);
-        JPanel fillBox = colourBox(new Color(255, 255, 255, 0), 25); // transparent = "no fill"
-
+        JPanel fillBox = colourBox(new Color(255, 255, 255, 0), 25);
         bar.add(new JLabel("Stroke:"));
         bar.add(strokeBox);
-        bar.add(new JLabel("Fill: (R-click)"));
+        bar.add(new JLabel("Fill (R-click):"));
         bar.add(fillBox);
 
-        // ► tool buttons
+        // botones de herramienta con iconos
         ButtonGroup toolGroup = new ButtonGroup();
         for (Tool t : Tool.values()) {
-            JToggleButton b = new JToggleButton(t.name());
-            b.addActionListener(e -> canvas.setTool(t));
+            // nombre de archivo: pencil.png, rectangle.png, oval.png, eraser.png, arc.png
+            // (si lo tuvieras)
+            String file = t.name().toLowerCase() + ".png";
+            ImageIcon ic = loadIcon(file);
+            JToggleButton btn = (ic != null)
+                    ? new JToggleButton(ic)
+                    : new JToggleButton(t.name());
+            btn.setToolTipText(t.name());
+            btn.addActionListener(e -> canvas.setTool(t));
             if (t == Tool.PENCIL)
-                b.setSelected(true);
-            bar.add(b);
-            toolGroup.add(b);
+                btn.setSelected(true);
+            bar.add(btn);
+            toolGroup.add(btn);
         }
 
-        // ► palette swatches (L-click = stroke, R-click = fill)
+        // paleta de colores
         for (Color c : PALETTE) {
             JPanel sw = colourBox(c, 25);
-            sw.setToolTipText("L-click: stroke | R-click: fill");
+            sw.setToolTipText("L-click = stroke | R-click = fill");
             sw.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mousePressed(MouseEvent e) {
@@ -255,7 +260,7 @@ public class PaintApp {
             bar.add(sw);
         }
 
-        // ► eraser size slider (only affects ERASER)
+        // slider de borrador
         JSlider eraserSlider = new JSlider(4, 60, 12);
         eraserSlider.setPreferredSize(new Dimension(120, 20));
         eraserSlider.setToolTipText("Eraser size");
@@ -263,14 +268,22 @@ public class PaintApp {
         bar.add(new JLabel("Eraser size:"));
         bar.add(eraserSlider);
 
-        // ► utility buttons
-        JButton undo = new JButton("Undo"), clear = new JButton("Clear"), save = new JButton("Save PNG");
-        undo.addActionListener(e -> canvas.undo());
-        clear.addActionListener(e -> canvas.clearAll());
-        save.addActionListener(e -> canvas.savePNG());
-        bar.add(undo);
-        bar.add(clear);
-        bar.add(save);
+        // botones utilitarios: Undo | Clear | Save
+        JButton undoBtn = new JButton("Undo");
+        undoBtn.addActionListener(e -> canvas.undo());
+        bar.add(undoBtn);
+
+        ImageIcon clearIc = loadIcon("clear.png");
+        JButton clearBtn = (clearIc != null)
+                ? new JButton(clearIc)
+                : new JButton("Clear");
+        clearBtn.setToolTipText("Clear all");
+        clearBtn.addActionListener(e -> canvas.clearAll());
+        bar.add(clearBtn);
+
+        JButton saveBtn = new JButton("Save PNG");
+        saveBtn.addActionListener(e -> canvas.savePNG());
+        bar.add(saveBtn);
 
         frame.add(bar, BorderLayout.NORTH);
         frame.setSize(1100, 750);
@@ -278,7 +291,6 @@ public class PaintApp {
         frame.setVisible(true);
     }
 
-    /* Helper: makes a square panel with its colour */
     private static JPanel colourBox(Color c, int size) {
         JPanel p = new JPanel();
         p.setBackground(c);
